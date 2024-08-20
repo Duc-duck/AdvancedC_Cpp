@@ -2,7 +2,7 @@
 
 ## Compiler ##
 <details close>
-<summary>Learn more</summary>
+
 - Trình biên dịch là một chương trình máy tính được thiết kế để dịch code viết bằng một ngôn ngữ lập trình (source language) sang ngôn ngữ khác (the target language). 
 
 - Compiler thường dùng biên dịch ngôn ngữ bậc cao (C++, Java,...) về ngôn ngữ bậc thấp hơn (ASM, object code,...) để tạo ra một chương trình mà máy tính có thể hiểu và thực thi được.
@@ -56,9 +56,9 @@ gcc test1.o test2.o main.o -o main
 ```
 </details>
 
-## MARCRO
+## MACRO
 <details close>
-<summary>Learn more</summary>
+
 Là thuật ngữ chỉ những thông tin được xử lý ở quá trình tiền xử lý (Preprocessing). Có 3 loại macro chính:
 - #include
 - #define, #undef
@@ -83,6 +83,109 @@ File main.i
 int sum(int a, int b);
 int main(){return 0;}
 ```
+### \#define
+Khi định nghĩa một macro bằng cách sử dụng tiền xử lý #define, mỗi khi macro được gọi trong source code thì compiler sẽ thay thể macro đó với nội dung nó được định nghĩa.
+```c
+#include <stdio.h>
 
+#define SQUARE(x) ((x) * (x))
+int main() 
+{
+ int result = SQUARE(5); // int result = ((5) * (5));
+ printf("Result is: %d\n", result);
+ return 0;
+}
+```
 
+## \#undef
+
+Để định nghĩa là macro trùng tên, ta phải hủy định nghĩa cũ trước đó của nó, sau đó mới được định nghĩa lại macro đó.
+
+ Chỉ thị #undef dùng để hủy định nghĩa của một macro đã được 
+định nghĩa trước đó bằng #define.
+
+```c
+#include <stdio.h>
+#define SENSOR_DATA 42
+int main() {
+ printf("Value of MY_MACRO: %d\n", MY_MACRO); 
+ // Hủy định nghĩa SENSOR_DATA
+ #undef SENSOR_DATA
+ // Định nghĩa SENSOR_DATA
+ #define SENSOR_DATA 50
+ printf("Value of MY_MACRO: %d\n", MY_MACRO);
+ return 0;
+}
+```
+Output:
+> Value of MY_MACRO: 42 \
+> Value of MY_MACRO: 50
+
+## \#if, #elif, #else
+Macro #if để bắt đầu một điều kiện tiền xử lý. 
+Đoạn code dưới đây mô tả cách macro #if, #elif, #else hoạt động.
+```c
+#include <stdio.h>
+
+// Định nghĩa một macro
+#define CONDITION 3
+
+int main() {
+    // Sử dụng #if, #elif, #else
+    #if CONDITION == 1                               // Điều kiện #if sai, lệnh #define không được thực thi
+        #define SENSOR TRUE
+    #elif CONDITION == 2                             // Tiếp tục kiểm tra với #elif
+        #define SENSOR FALSE            
+    #else                                          // Không có điều kiện nào ở trên đúng
+        printf("FALIED.\n");
+    #endif
+
+    return 0;
+}
+```
+## \#ifdef, #ifndef
+#ifdef dùng để kiểm tra nếu macro đã được định nghĩa thì mã nguồn sau #ifdef sẽ được biên dịch.
+#ifndef dùng để kiểm tra nếu macro chưa được định nghĩa thì mã nguồn sau #ifndef sẽ được biên dịch.
+```c
+#ifndef __ABC_H
+#define __ABC_H
+#endif
+
+#ifdef __ABC_H
+int a = 0;
+#endif
+```
+##Macro function
+Ta có thể dùng macro để định nghĩa function, khi macro function có nhiều dòng, ta gõ ký tự "\" để xuống dòng.
+```c
+#define SUM(a,b) \
+printf("Tong la: ", a+b);\
+return (a+b);
+```
+Viết macro function sẽ tối ưu về tốc độ hơn so với việc ta viết riêng định nghĩa function đó. Tuy nhiên macro function sẽ không tối ưu về bộ nhớ trên RAM.
+
+## Toán tử \# và \#\# trong macro
+Toán tử #: chuỗi nhập vào tự chuẩn hóa thành dạng chuỗi
+```c
+  #define CREATE_FUNC(func, cmd)  \
+  void func() {                   \
+      printf(#cmd);               
+  }
+  CREATE_FUNC (test1, this is function test1)
+
+  //Kết quả quá trình preprocessing sẽ là:
+  // void test1() {
+  // printf("this is function test1");
+  //}
+```
+Toán tử ##: nối các chuỗi lại với nhau.
+```c
+  #define CREATE_VAR(name)        \
+  int int_##name;  
+  CREATE_VAR(first)
+  //Kết quả quá trình preprocessing sẽ là:
+  // int int_first;
+```
+
+##Variadic macro
 </details>
