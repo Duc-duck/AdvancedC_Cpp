@@ -188,4 +188,74 @@ Toán tử ##: nối các chuỗi lại với nhau.
 ```
 
 ##Variadic macro
+Là dạng macro khi định nghĩa có số lượng tham số đầu vào là bất định, cho phép người lập trình mở rộng không giới hạn số lượng tham số truyền vào.
+Sử dụng cú pháp "..." biểu thị những tham số sau có thể mở rộng.
+```c
+// Định nghĩa variadic macro
+#define PRINT_ARGS(format, ...) printf(format, __VA_ARGS__);
+
+int main () { 
+    PRINT_ARGS("Hello numbers %d, %f, %s", 10, 27.3, " OK") // printf("Hello numbers %d, %f, %s", 10, 27.3, " OK");
+    return 0;}
+```
+# Lesson 2: STDARG - ASSERT
+## Thư viện STDARG
+Là một thư viện chuẩn của ngôn ngữ C, cho phép định nghĩa hàm với số lượng tham số tùy ý.
+
+Giả sử ta định nghĩa một hàm "void display(int count,...);", để sử dụng thư viện STDARD định nghĩa hàm trên ta cần hiểu rõ các thành phần sau:
+
+**va_list val**: là một kiểu dữ liệu khi khai báo ta sẽ được một biến con trỏ là val, con trỏ này được khai báo để trỏ tới vùng nhớ của một chuỗi với các phần tử chuỗi lần lượt là địa chỉ của các tham số truyền vào.
+
+**va_start(val, count)**: có tác dụng khởi tạo một chuỗi chứa các địa chỉ của các tham số được truyền vào hàm, ta tạm gọi chuỗi này là chuỗi A. Đầu tiên val sẽ được trỏ tới vùng nhớ trong chuỗi A chứa địa chỉ của biến count.
+
+**va_arg(val, <type>)**: tại vị trí val đang trỏ tới (ví dụ là đang trỏ tới tham số count), trỏ tiếp tới vị trí tiếp theo trong chuỗi A, vị trí này mang giá trị là địa chỉ của tham số kế tiếp. Sau đó val được ép kiểu theo kiểu dữ liệu <type> được chỉ định.
+
+**va_end(val)**: giải phóng bộ nhớ, kết thúc việc sử dụng chuỗi A mang các địa chỉ của tham số truyền vào
+
+```c
+#include <stdio.h>
+#include <stdarg.h>
+
+void display(int count, ...) {
+    va_list av;
+    va_start(av, count);
+   
+    printf("Value at 1: %d\n", va_arg(av,int)); 
+    printf("Value at 2: %d\n", va_arg(av,int)); 
+
+    va_end(va);
+}
+
+int main(){
+    display(5, 6, 8,);
+    return 0;
+}
+
+//OUTPUT: 
+// Value at 1: 6
+// Value at 2: 8
+```
+
+## Thư viện ASSERT
+
+Thư viện này sử dụng để hỗ trợ debug chương trình
+
+**Hàm assert()**: dùng để khai báo điều kiện, nếu điều kiện đúng thì tiếp tục chương trình, nếu điều kiện sai thì chương trình sẽ dừng và báo lỗi tại vị trí code đang lỗi.
+
+```c
+#include <stdio.h>
+#include <assert.h>
+#include <math.h>
+
+double canbachai(int a){
+    assert( a >= 0 && "Giá trị đầu vào bé hơn 0");
+    return (double) sqrt(b);
+}
+
+int main(int argc, char const*argv[])
+{
+    printf("Output: %f\n", canbachai(-4)); 
+    return 0;
+}
+```
 </details>
