@@ -201,8 +201,9 @@ int main () {
 </details>
 
 # Lesson 2: STDARG - ASSERT
-<details close>
+
 ## Thư viện STDARG
+<details close>
 Là một thư viện chuẩn của ngôn ngữ C, cho phép định nghĩa hàm với số lượng tham số tùy ý.
 
 Giả sử ta định nghĩa một hàm "void display(int count,...);", để sử dụng thư viện STDARD định nghĩa hàm trên ta cần hiểu rõ các thành phần sau:
@@ -238,9 +239,10 @@ int main(){
 // Value at 1: 6
 // Value at 2: 8
 ```
+</details>
 
 ## Thư viện ASSERT
-
+<details close>
 Thư viện này sử dụng để hỗ trợ debug chương trình
 
 **Hàm assert()**: dùng để khai báo điều kiện, nếu điều kiện đúng thì tiếp tục chương trình, nếu điều kiện sai thì chương trình sẽ dừng và báo lỗi tại vị trí code đang lỗi.
