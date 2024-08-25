@@ -264,3 +264,211 @@ int main(int argc, char const*argv[])
 }
 ```
 </details>
+
+# Lesson 3: Pointer
+<details close>
+
+## 1. Con trỏ
+
+Con trỏ là một biến có giá trị là địa chỉ vùng nhớ của một đối tượng (đối tượng có thế là biến, hàm, mảng, ...).
+
+Con trỏ được định nghĩa theo cú pháp:
+
+><kiểu dữ liệu>* <tên biến con trỏ>;
+
+ Đối tượng mà con trỏ trỏ tới phải có kiểu giữ liệu cùng với kiểu dữ liệu của con trỏ.
+
+Ví dụ: con trỏ kiểu int phải trỏ tới biến kiểu int.
+```c
+int a = 1;
+float b = 10;
+
+void* ptr1; // con trỏ void
+int* ptr2 = &a; // con trỏ kiểu int trỏ tới địa chỉ biến int là a
+float* ptr3 = &b; // con trỏ kiểu float trỏ tới địa chỉ biến float là b
+```
+
+## 2. Các kiểu con trỏ
+### Con trỏ hàm (Function pointer)
+Là kiểu con trỏ lưu giữ địa chỉ của một hàm.
+
+**Cú pháp**
+
+><kiểu dữ liệu trả về> (*<tên con trỏ>) (<các tham số đầu vào>);
+```c
+void (*ptr)(int, char*);
+
+// khai báo con trỏ pointer trỏ tới hàm có thông số hàm đầu vào lần lượt mang kiểu giữ liệu (int, char*)
+
+// Các hàm có tham số cùng số lượng, cùng kiểu dữ liệu đều có thể dùng con trỏ ptr để trỏ tới
+```
+**Ví dụ 1:** 
+
+Sử dụng con trỏ trỏ tới các hàm cùng kiểu dữ liệu, cùng số lượng và kiểu tham số đầu vào.
+```c
+#include <stdio.h>
+
+void tong(int a, int b) {
+    printf("Tong %d va %d: %d\n", a, b, a + b);
+}
+void hieu(int a, int b) {
+    printf("Hieu %d va %d: %d\n", a, b, a - b);
+}
+int main(int argc, char const *argv[]){
+    void (*ptr)(int, int);
+    ptr = &tong;
+    ptr(10,15); // output: Tong 10 va 15: 25
+
+    ptr = &hieu;
+    ptr(10,15); // output: Hieu 10 va 15: -5
+
+    return 0;
+}
+```
+**Ví dụ 2:** 
+
+Sử dụng con trỏ hàm lưu mảng chứa địa chỉ của nhiều hàm.
+```c
+#include <stdio.h>
+
+void tong(int a, int b) {
+    printf("Tong %d va %d: %d\n", a, b, a + b);
+}
+void hieu(int a, int b) {
+    printf("Hieu %d va %d: %d\n", a, b, a - b);
+}
+int main(int argc, char const *argv[]){
+    void (*array[2])(int, int) = {&tong, &hieu};
+    array[0](10, 15); // output: Tong 10 va 15: 25
+    array[0](10, 15); // output: Hieu 10 va 15: -5
+    return 0;
+}
+```
+
+**Ví dụ 3:**
+Ứng dụng con trỏ hàm để truyền tham số vào một hàm, với tham số truyền là một hàm khác.
+```c
+void print(int(*ptr)(int, int), int a, int b)
+{
+    printf("Tong = %d\n", ptr(a, b));
+}
+int Cong(int a, int b)
+{
+    return a + b;
+}
+int main(int argc, char const *argv[]){
+    print(&Cong, 5, 6); //output: Tong = 11
+    return 0;
+}
+```
+### Con trỏ void (void pointer)
+
+Con trỏ hàm là kiểu con trỏ có thể trỏ đến bất kỳ kiểu dữ liệu nào.
+
+Để sử dụng giá trị đối tượng mà con trỏ void trỏ tới, ta phải ép kiểu chính con trỏ void đó thành cùng kiểu dữ liệu với đối tượng đó.
+
+**Cú pháp**
+
+>void *<tên con trỏ>;
+
+```c
+int a = 1;
+float b = 100;
+
+float tong (float a, float b)
+{
+    return a + b;
+}
+int main(int argc, char const *argv[]) {
+    void* ptr; // Khai báo ptr là con trỏ void
+    
+    ptr = &a;
+    a = *(int*)ptr + 100;
+    printf("Bien a = %d\n", a); // output: Biến a = 101
+
+    ptr = &b;
+    b = *(float*)ptr / 1000; // output: Biến b = 0.1
+    printf("Bien b = %f\n", b); 
+
+    ptr = &tong;
+    float ketqua = ((float(*)(float, float))ptr) (10,12);
+    printf("KQ = %f\n", ketqua); // output: KQ = 22
+}
+```
+## Con trỏ NULL (NULL pointer)
+
+Con trỏ NULL là con trỏ không trỏ tới bất kỳ một địa chỉ nào hết.
+
+Con trỏ NULL có giá trị bằng 0 và địa chỉ cũng bằng 0.
+
+Con trỏ NULL được dùng khi ta khai báo con trỏ nhưng chưa khai báo giá trị cho nó trỏ tới. Hoặc khi ta sử dụng xong một con trỏ ta phải gán nó bằng NULL.
+
+**Tại sao sử dụng con trỏ NULL**
+
+Khi ta khai báo một con trỏ, nó trỏ tới 1 địa chỉ rác không xác định địa chỉ này có thể là địa chỉ của một hàm hoặc một biến khác, gây ra lỗi không xác định. Khai báo một con trỏ là con trỏ NULL sẽ ngăn chặn điều này.
+
+**Cú pháp**
+><kiểu dữ liệu>* <tên con trỏ> = NULL;
+```c
+int* ptr = NULL;
+```
+## Hằng con trỏ (const pointer)
+Là kiểu con trỏ được khai báo và trỏ tới một giá trị địa chỉ. 
+
+Trong suốt quá trình chương trình thực thi, con trỏ hằng sẽ không thể thay đổi địa chỉ mà nó trỏ đến.
+
+Người lập trình chỉ có thể giải tham chiếu để thay đổi giá trị chứa trong địa chỉ mà nó trỏ đến.
+
+```c
+#include <stdio.h>
+
+int a = 10;
+int b = 20;
+int* const ptr = &a;
+
+int main(int argc, char const *argv[]){
+    printf("%p\n", ptr);
+    printf("%d\n", *ptr);
+
+    // Lỗi: Không được phép thay đổi giá trị của hằng con trỏ !
+    ptr = &b;
+    return 0;
+}
+```
+## Con trỏ hằng (pointer to constant)
+
+Là kiểu con trỏ trỏ đến một địa chỉ, và nó mặc định giá trị lưu trong địa chỉ đó là một giá trị hằng.
+
+Người lập trình có thể đọc giá trị địa chỉ mà con trỏ hằng trỏ tới, tuy nhiên không thể giải tham chiếu con trỏ hằng để thay đổi giá trị được lưu tại địa chỉ đó.
+
+Để thay đổi giá trị lưu trong địa chỉ con trỏ hằng trỏ tới, người lập trình phải gọi ra biến lưu địa chỉ này và thay đổi trực tiếp.
+
+```c
+#include <stdio.h>
+
+int a = 10;
+int b = 20;
+const int* ptr = &a;
+
+int main(int argc, char const *argv[]){
+    printf("%p\n", ptr);  // 00007FF75E1B3010
+    printf("%d\n", *ptr); // 10
+
+    ptr = &b;
+    printf("%p\n", ptr);  // 00007FF75E1B3014
+    printf("%d\n", *ptr); // 20
+
+    b = 100;
+    printf("%p\n", ptr);  // 00007FF75E1B3014
+    printf("%d\n", *ptr); // 100
+
+    // Lỗi: Không được phép thay đổi giá trị của hằng con trỏ !
+    *ptr = 100;
+
+    return 0;
+}
+```
+## Con trỏ trỏ đến con trỏ
+
+
+</details>
