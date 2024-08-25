@@ -470,5 +470,43 @@ int main(int argc, char const *argv[]){
 ```
 ## Con trỏ trỏ đến con trỏ
 
+Là một dạng của kiểu dữ liệu con trỏ, cho phép con trỏ đã được khai báo trỏ tới địa chỉ của một con trỏ khác. 
 
+Với con trỏ này ta có thể thay đổi giá trị con trỏ gốc được trỏ tới
+
+**Cú pháp**
+> <kiểu dữ liệu>**<tên con trỏ>;
+```c
+int tong (int a, int b)
+{
+    return a + b;
+}
+
+// HÀM LÀ KIỂU DỮ LIỆU TRẢ VỀ GIÁ TRỊ ĐỊA CHỈ
+
+int main() {
+    int (*ptr1)(int, int);
+    ptr1 = &tong;  // Con trỏ hàm trỏ đến một hàm
+
+    int (**ptr2)(int, int) = &ptr1;  // Con trỏ đến con trỏ
+
+    printf("Gia tri tong ptr1: %d\n", ptr1(10, 12)); // gọi ham tong() sử dụng ptr1
+    printf("Gia tri tong ptr2: %d\n", (*ptr2)(10, 12));// giải tham chiếu ptr2 thành ptr1, sau đó gọi tong()
+
+    printf("Gia tri tong ptr2: %d\n\n", (**ptr2)(10, 12));// giải tham chiếu ptr2 được ptr1, sau đó giải tham chiếu ptr1 để gọi tong()
+
+    printf("Gia tri dia chi ham tong: %p hay %p hay %p\n", &tong, *tong, tong); // in ra địa chỉ hàm tong()
+
+    printf("Gia tri ptr1 la dia chi ham tong: %p\n", *ptr1); // giải tham chiếu được giá trị của tong(), mà giá trị của tong() chính là địa chỉ của tong.
+
+    printf("Gia tri ptr2 la dia chi ptr1: %p\n", *ptr2); // giải tham chiếu được giá trị địa chỉ được lưu trong biến ptr1, cũng chính là địa chỉ của tong.
+
+    printf("Gia tri ptr1 la dia chi ham tong: %p\n\n", **ptr2); // giải tham chiếu được giá trị địa chỉ được lưu trong biến ptr1, giải tham chiếu tiếp được giá trị của tong(), mà giá trị của tong() chính là địa chỉ của tong.
+
+    printf("Gia tri dia chi ptr1: %p\n", &ptr1);
+    printf("Gia tri dia chi ptr2: %p\n", &ptr2);
+
+    return 0;
+}
+```
 </details>
