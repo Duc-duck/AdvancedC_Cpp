@@ -198,7 +198,10 @@ int main () {
     PRINT_ARGS("Hello numbers %d, %f, %s", 10, 27.3, " OK") // printf("Hello numbers %d, %f, %s", 10, 27.3, " OK");
     return 0;}
 ```
+</details>
+
 # Lesson 2: STDARG - ASSERT
+<details close>
 ## Thư viện STDARG
 Là một thư viện chuẩn của ngôn ngữ C, cho phép định nghĩa hàm với số lượng tham số tùy ý.
 
