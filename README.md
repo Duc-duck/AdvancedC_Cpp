@@ -340,7 +340,7 @@ void hieu(int a, int b) {
 int main(int argc, char const *argv[]){
     void (*array[2])(int, int) = {&tong, &hieu};
     array[0](10, 15); // output: Tong 10 va 15: 25
-    array[0](10, 15); // output: Hieu 10 va 15: -5
+    array[1](10, 15); // output: Hieu 10 va 15: -5
     return 0;
 }
 ```
@@ -488,7 +488,7 @@ int main() {
     int (*ptr1)(int, int);
     ptr1 = &tong;  // Con trỏ hàm trỏ đến một hàm
 
-    int (**ptr2)(int, int) = &ptr1;  // Con trỏ đến con trỏ
+    int (**ptr2)(int, int) = &ptr1;  // Con trỏ trỏ đến con trỏ
 
     printf("Gia tri tong ptr1: %d\n", ptr1(10, 12)); // gọi ham tong() sử dụng ptr1
     printf("Gia tri tong ptr2: %d\n", (*ptr2)(10, 12));// giải tham chiếu ptr2 thành ptr1, sau đó gọi tong()
@@ -508,5 +508,6 @@ int main() {
 
     return 0;
 }
+
 ```
 </details>
